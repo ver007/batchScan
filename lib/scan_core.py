@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 #coding=utf8
 
+from scantool import ScanTool
+
 class AbstractScan:
     def __init__(self, options):
         self.options = options

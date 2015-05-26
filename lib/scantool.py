@@ -4,7 +4,6 @@
 import re
 import requests
 import threadpool as tp
-from scantool import ScanTool
 
 class ScanTool:
     def __init__(self, url_list, payload, scan_rule, res_rule, method, threadnum):

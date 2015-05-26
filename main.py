@@ -49,7 +49,7 @@ def main():
     judge_arg()
     get_item()
     scanner = AbstractScan(get_item())
-    scnner.scan_url()
+    scanner.scan_url()
 
 if __name__ == '__main__':
     main()

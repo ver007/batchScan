@@ -3,7 +3,9 @@
 
 import os
 import glob
+import sys
 from optparse import OptionParser
+from lib.scan_core import AbstractScan
 
 options = None
 arguments = None
@@ -15,29 +17,30 @@ class Item():
         self.payload = payload
         self.method = method
 
+'''接收参数'''
 def recv_args():
     global options, arguments
     parser = OptionParser()
-    parser.add_option('--file', '-f', dest='file', defualt='url.txt',
-        help='input file', metavar='FILE')
-    parser.add_option('--out', '-o', default='res.txt', dest='output',
-        help='ouput file', metavar='OUT FILE')
     parser.add_option('--thread', '-t', default='10', dest='thread',
         help='choose thread number')
-    parse.add_option('--name', '-t', dest='name',
+    parser.add_option('--name', '-n', dest='name',
         help='from node floder choose a script')
     (options, arguments) = parser.parse_args()
 
+'''判断参数输入是否正确'''
 def judge_arg():
-    if not os.path.exists(options.file):
-        parser.error('输入文件不存在')
     if not options.name:
-        parser.error('没有选择攻击脚本')
+        print '[-]ERROR MESSAGE! Not choose a script!'
+        sys.exit()
 
 def get_item():
     global options
     __import__ ('node.' + options.name)
-    item = Item(dict_rule['scan_rule'], dict_rule['res_rule'], dict_rule['payload'], dict_rule['method'])
+    scan_rule = sys.modules['node.'+options.name].dict_rule['scan_rule']
+    res_rule = sys.modules['node.'+options.name].dict_rule['res_rule']
+    payload = sys.modules['node.'+options.name].dict_rule['payload']
+    method = sys.modules['node.'+options.name].dict_rule['method']
+    item = Item(scan_rule, res_rule, payload, method, options.thread)
     return item
 
 def main():
@@ -45,8 +48,8 @@ def main():
     recv_args()
     judge_arg()
     get_item()
-    scanner = AbstractScanner(get_item())
-    scnner.run()
+    scanner = AbstractScan(get_item())
+    scnner.scan_url()
 
 if __name__ == '__main__':
     main()

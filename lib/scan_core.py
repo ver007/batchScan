@@ -17,4 +17,4 @@ class AbstractScan:
         with open('url.txt') as urltxt:
             url_list = urltxt.read().split('\n')
         scanner = ScanTool(url_list, payload, scan_rule, res_rule, method, threadnum)
-        scanner.scan()
+        scanner.run()
